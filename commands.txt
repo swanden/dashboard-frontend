@@ -1,0 +1,4 @@
+sudo vue create admin-panel-frontend
+sudo chown -R den:den admin-panel-frontend
+vue add vuetify
+npm install axios
