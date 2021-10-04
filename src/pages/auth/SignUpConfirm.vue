@@ -15,11 +15,11 @@
 
 <script>
 import axios from '@/axios';
-import notificationMixin from "@/mixins/notification";
+import notification from "@/mixins/notification";
 
 export default {
   name: "SignUpConfirm",
-  mixins: [notificationMixin],
+  mixins: [notification],
   async mounted() {
     if (!this.$route.query.token) {
       this.showNotification({

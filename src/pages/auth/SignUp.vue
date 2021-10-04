@@ -79,11 +79,11 @@
 <script>
 import axios from '@/axios';
 import {mapActions} from 'vuex';
-import notificationMixin from "@/mixins/notification";
+import notification from "@/mixins/notification";
 
 export default {
   name: "SignUp",
-  mixins: [notificationMixin],
+  mixins: [notification],
   data: () => ({
     valid: false,
     passwordShow: false,
