@@ -1,24 +1,13 @@
 <template>
   <v-container>
     <v-row class="text-center justify-center">
-      <v-card class="mt-12 col-md-3">
+      <v-card class="mt-12 col-md-3" v-if="formShow">
 
-        <v-card-title>Login</v-card-title>
+        <v-card-title>Password reset</v-card-title>
 
-        <v-form  v-model="valid" ref="form" @submit.prevent="login">
+        <v-form  v-model="valid" ref="form" @submit.prevent="request">
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-              >
-                <v-text-field
-                  v-model="email"
-                  :rules="[rules.required, rules.email]"
-                  label="Email"
-                  outlined
-                  required
-                ></v-text-field>
-              </v-col>
 
               <v-col cols="12">
                 <v-text-field
@@ -35,18 +24,14 @@
                 ></v-text-field>
               </v-col>
 
-
-              <v-col cols="6" class="text-left">
+              <v-col cols="12" >
                 <v-btn
                   color="primary"
+                  width="100%"
                   elevation="2"
-                  class="justify-end"
                   type="submit"
                   :disabled="!valid"
-                >Login</v-btn>
-              </v-col>
-              <v-col cols="6" class="d-flex align-center justify-end" >
-                <router-link to="/reset/request">Forgot password?</router-link>
+                >Set password</v-btn>
               </v-col>
 
             </v-row>
@@ -59,34 +44,52 @@
 
 <script>
 import notification from "@/mixins/notification";
+import {mapActions} from 'vuex';
+import axios from "@/axios";
 
 export default {
-  name: "Login",
+  name: "ResetPassword",
   mixins: [notification],
+  props: ['token'],
   data: () => ({
     valid: false,
+    formShow: false,
     passwordShow: false,
     password: '',
-    email: '',
     rules: {
       required: value => !!value || 'Required.',
       min: v => v.length >= 6 || 'Min 6 characters',
-      emailMatch: () => (`The email and password you entered don't match`),
-      email: value => {
-        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        return pattern.test(value) || 'Invalid e-mail.'
-      },
     }
   }),
+  async mounted() {
+    try {
+      await axios.get('/auth/reset/validate_token/' + this.$route.params.token);
+      this.formShow = true;
+    } catch(error) {
+      this.showError(error, -1);
+    }
+  },
   methods: {
-    async login() {
+    ...mapActions(
+      'main',
+      {
+        showNotification: 'showNotification'
+      }
+    ),
+    async request() {
       try {
-        await this.$store.dispatch('auth/login', {
-          username: this.email,
-          password: this.password,
+        await axios.post('/auth/reset', {
+          token: this.$route.params.token,
+          password: this.password
         });
 
-        this.$router.push({name: 'index'});
+        this.$refs.form.reset(); // May cause errors
+
+        this.showNotification({
+          type: 'success',
+          msg: 'Password was successfully changed.',
+          timeout: -1
+        });
       } catch (error) {
         this.showError(error);
       }

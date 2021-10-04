@@ -3,9 +3,9 @@
     <v-row class="text-center justify-center">
       <v-card class="mt-12 col-md-3">
 
-        <v-card-title>Login</v-card-title>
+        <v-card-title>Password reset</v-card-title>
 
-        <v-form  v-model="valid" ref="form" @submit.prevent="login">
+        <v-form  v-model="valid" ref="form" @submit.prevent="request">
           <v-container>
             <v-row>
               <v-col
@@ -20,33 +20,14 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12">
-                <v-text-field
-                  v-model="password"
-                  :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="[rules.required, rules.min]"
-                  :type="passwordShow ? 'text' : 'password'"
-                  name="input-10-1"
-                  label="Password"
-                  hint="At least 6 characters"
-                  outlined
-                  counter
-                  @click:append="passwordShow = !passwordShow"
-                ></v-text-field>
-              </v-col>
-
-
-              <v-col cols="6" class="text-left">
+              <v-col cols="12" >
                 <v-btn
                   color="primary"
+                  width="100%"
                   elevation="2"
-                  class="justify-end"
                   type="submit"
                   :disabled="!valid"
-                >Login</v-btn>
-              </v-col>
-              <v-col cols="6" class="d-flex align-center justify-end" >
-                <router-link to="/reset/request">Forgot password?</router-link>
+                >Reset password</v-btn>
               </v-col>
 
             </v-row>
@@ -59,19 +40,17 @@
 
 <script>
 import notification from "@/mixins/notification";
+import {mapActions} from 'vuex';
+import axios from "@/axios";
 
 export default {
-  name: "Login",
+  name: "ResetPasswordRequest",
   mixins: [notification],
   data: () => ({
     valid: false,
-    passwordShow: false,
-    password: '',
     email: '',
     rules: {
       required: value => !!value || 'Required.',
-      min: v => v.length >= 6 || 'Min 6 characters',
-      emailMatch: () => (`The email and password you entered don't match`),
       email: value => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return pattern.test(value) || 'Invalid e-mail.'
@@ -79,14 +58,25 @@ export default {
     }
   }),
   methods: {
-    async login() {
+    ...mapActions(
+      'main',
+      {
+        showNotification: 'showNotification'
+      }
+    ),
+    async request() {
       try {
-        await this.$store.dispatch('auth/login', {
-          username: this.email,
-          password: this.password,
+        await axios.post('/auth/reset/request', {
+          email: this.email
         });
 
-        this.$router.push({name: 'index'});
+        this.$refs.form.reset(); // May cause errors
+
+        this.showNotification({
+          type: 'success',
+          msg: 'Check your email.',
+          timeout: -1
+        });
       } catch (error) {
         this.showError(error);
       }
