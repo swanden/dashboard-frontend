@@ -9,11 +9,15 @@ const config = {
 export default {
   namespaced: true,
   state: {
-    user: JSON.parse(localStorage.getItem('user'))
+    user: JSON.parse(localStorage.getItem('user')),
+    email: JSON.parse(localStorage.getItem('email'))
   },
   getters: {
     isLoggedIn(state) {
       return !!state.user;
+    },
+    getEmail(state) {
+      return state.email;
     },
     isAdmin(state) {
       return state.user.roles.includes('ROLE_ADMIN');
@@ -25,6 +29,9 @@ export default {
     },
     logout(state) {
       state.user = null;
+    },
+    setEmail(state, email) {
+      state.email = email;
     }
   },
   actions: {
@@ -43,25 +50,30 @@ export default {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
         user.roles = await axios.get('/user/role');
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('email', JSON.stringify(data.username));
         context.commit('login', user);
+        context.commit('setEmail', data.username);
 
         return user;
       } catch (error) {
         context.commit('logout');
+        context.commit('setEmail', null);
         localStorage.removeItem('user');
+        localStorage.removeItem('email');
 
         return Promise.reject(error);
       }
     },
     async logout(context) {
       context.commit('logout');
+      context.commit('setEmail', null);
       localStorage.removeItem('user');
+      localStorage.removeItem('email');
       delete axios.defaults.headers.common['Authorization'];
 
       return Promise.resolve();
     },
     async refresh(context) {
-      console.log('refresh')
       if (context.state.user) {
         const params = new URLSearchParams();
         params.append('grant_type', 'refresh_token');
@@ -72,7 +84,6 @@ export default {
         delete axios.defaults.headers.common['Authorization'];
 
         try {
-          console.log('refresh2')
           const user = await axios.post('/token', params, config);
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
           user.roles = await axios.get('/user/role');

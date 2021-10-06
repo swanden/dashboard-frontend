@@ -1,10 +1,10 @@
 import {mapActions} from "vuex";
-import {snackbarTimeout} from '@/store/modules/main';
+import {snackbarTimeout} from '@/store/modules/notification';
 
 export default {
   methods: {
     ...mapActions(
-      'main',
+      'notification',
       {
         showNotification: 'showNotification'
       }

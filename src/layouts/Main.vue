@@ -1,20 +1,24 @@
 <template>
   <v-app>
+
     <v-app-bar
-        app
-        color="primary"
-        dark
+      app
+      color="primary"
+      dark
     >
+      <v-app-bar-nav-icon
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
       <div class="d-flex align-center">
         <a href="/">
-                <v-img
-                  alt="Vuetify Logo"
-                  class="shrink mr-2"
-                  contain
-                  src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-                  transition="scale-transition"
-                  width="40"
-                />
+          <v-img
+            alt="Vuetify Logo"
+            class="shrink mr-2"
+            contain
+            src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+            transition="scale-transition"
+            width="40"
+          />
         </a>
 
         <h1 class="text-uppercase">Dashboard</h1>
@@ -24,18 +28,62 @@
 
     </v-app-bar>
 
+    <v-navigation-drawer
+      v-model="drawer"
+      fixed
+      temporary
+    >
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img src="@/assets/account.jpeg"></v-img>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title>{{ email }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list dense>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+
+          :to="item.url"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-list-item
+          key="logout"
+          link
+          @click="performLogout"
+        >
+          <v-list-item-icon>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+      </v-list>
+    </v-navigation-drawer>
+
     <v-main>
       <v-container>
-        <v-row class="text-center justify-center">
+        <v-row>
           <v-col>
-
-            <v-tabs class="d-flex justify-center" v-if="isShowLoginMenu">
-              <v-tab
-                v-for="tab in authMenuTabs"
-                :to="tab.url"
-                :key="tab.name"
-              >{{ tab.name }}</v-tab>
-            </v-tabs>
             <keep-alive>
               <router-view/>
             </keep-alive>
@@ -44,76 +92,50 @@
         </v-row>
       </v-container>
 
-      <v-snackbar
-          v-model="isShowSnackbar"
-          top
-          :timeout="snackbarTimeout"
-          :color="snackbarProps[snackbarType].snackbarColor"
-
-      >
-        {{ snackbarText }}
-
-        <template v-slot:action="{ attrs }">
-          <v-btn
-              :color="snackbarProps[snackbarType].btnColor"
-              text
-              v-bind="attrs"
-              @click="isShowSnackbar = false"
-          >
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
+      <notification></notification>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import Notification from "@/layouts/Notification";
+import { mapGetters, mapActions } from 'vuex';
+import notification from "@/mixins/notification";
 
 export default {
-  name: "Main",
+  name: "Auth",
+  components: {
+    Notification
+  },
+  mixins: [notification],
   data() {
     return {
-      authMenuTabs: [
-        {
-          name: 'Sign in',
-          url: '/login'
-        },
-        {
-          name: 'Sign up',
-          url: '/signup'
-        }
-      ]
+      drawer: null,
+      items: [
+        { title: 'Home', icon: 'mdi-home', url: '/' },
+        { title: 'About', icon: 'mdi-forum', url: '/about' },
+      ],
     }
   },
   computed: {
-    isShowLoginMenu() {
-      return !this.isLoggedIn && this.authMenuTabs.find((el) => el.url === this.$route.path);
-    },
-    isShowSnackbar: {
-      get() {
-        return this.$store.getters["main/isShowSnackbar"];
-      },
-      set(value) {
-        this.$store.dispatch('main/setIsShowSnackBar', value)
-      }
-    },
-    ...mapGetters(
-      'main',
-      {
-        snackbarText: 'snackbarText',
-        snackbarType: 'snackbarType',
-        snackbarTimeout: 'snackbarTimeout',
-        snackbarProps: 'snackbarProps'
-      }
-    ),
     ...mapGetters(
       'auth',
-      {
-        isLoggedIn: 'isLoggedIn'
-      }
+      { email: 'getEmail' }
     )
+  },
+  methods: {
+    ...mapActions(
+      'auth',
+      { logout: 'logout' }
+    ),
+    async performLogout() {
+      try {
+        await this.logout();
+        await this.$router.push({ name: 'login' });
+      } catch (error) {
+        this.showError(error);
+      }
+    }
   }
 }
 </script>

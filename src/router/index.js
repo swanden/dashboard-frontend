@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store/index'
+
 import Home from '@/views/Home.vue'
 import Login from '@/pages/auth/Login.vue'
 import SignUp from "@/pages/auth/SignUp";
@@ -11,39 +13,57 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'index',
+    name: 'home',
     // redirect: '/login'
     component: Home
   },
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    meta: {
+      hideForAuth: true
+    }
   },
   {
     path: '/signup',
     name: 'signup',
-    component: SignUp
+    component: SignUp,
+    meta: {
+      hideForAuth: true
+    }
   },
   {
     path: '/signup/confirm',
     name: 'signup.confirm',
-    component: SignUpConfirm
+    component: SignUpConfirm,
+    meta: {
+      hideForAuth: true
+    }
   },
   {
     path: '/reset/request',
     name: 'reset.request',
-    component: PasswordResetRequest
+    component: PasswordResetRequest,
+    meta: {
+      hideForAuth: true
+    }
   },
   {
     path: '/reset/:token',
     name: 'reset',
-    component: () => import('../pages/auth/PasswordReset.vue')
+    component: () => import('../pages/auth/PasswordReset.vue'),
+    meta: {
+      hideForAuth: true
+    }
   },
   {
     path: '/404',
     name: '404',
-    component: () => import('../pages/404Page.vue')
+    component: () => import('../pages/404Page.vue'),
+    meta: {
+      hideForAuth: true
+    }
   },
   {
     path: '*',
@@ -63,37 +83,25 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.requiresAuth)) {
-//     if (localStorage.getItem('user') == null) {
-//       next({
-//         path: '/login',
-//         params: { nextUrl: to.fullPath }
-//       })
-//     } else {
-//       let user = JSON.parse(localStorage.getItem('user'))
-//       if (to.matched.some(record => record.meta.is_admin)) {
-//         if (user.is_admin == 1) {
-//           next()
-//         } else {
-//           next({ name: 'userboard' })
-//         }
-//       } else {
-//         next()
-//       }
-//     }
-//   } else if (to.matched.some(record => record.meta.guest)) {
-//     if (localStorage.getItem('user') == null) {
-//       next()
-//     } else {
-//       next({ name: 'userboard' })
-//     }
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.hideForAuth)) {
+    if (!store.getters['auth/isLoggedIn']) {
+      next()
+      return;
+    }
+
+    next({ name: 'home' })
+  } else {
+    if (!store.getters['auth/isLoggedIn']) {
+      next({name: 'login'});
+      return;
+    }
+
+    next()
+  }
+})
 
 
 export default router

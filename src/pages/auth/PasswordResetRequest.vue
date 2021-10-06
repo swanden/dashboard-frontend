@@ -59,7 +59,7 @@ export default {
   }),
   methods: {
     ...mapActions(
-      'main',
+      'notification',
       {
         showNotification: 'showNotification'
       }

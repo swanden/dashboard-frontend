@@ -86,7 +86,7 @@ export default {
           password: this.password,
         });
 
-        this.$router.push({name: 'index'});
+        this.$router.push({ name: 'home' });
       } catch (error) {
         this.showError(error);
       }

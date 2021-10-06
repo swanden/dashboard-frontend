@@ -35,7 +35,7 @@ axios.interceptors.response.use(response => {
     return axios(request);
   } catch (error) {
     if (router.history.current.path !== '/login') {
-      router.push({name: 'Login'});
+      router.push({ name: 'login' });
       return Promise.reject(error);
     }
   }

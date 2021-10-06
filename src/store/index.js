@@ -3,12 +3,12 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import main from './modules/main';
+import notification from './modules/notification';
 import auth from './modules/auth';
 
 export default new Vuex.Store({
   modules: {
-    main,
+    notification,
     auth
   },
   // strict: process.env.MODE_INV !== 'production'
