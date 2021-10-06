@@ -1,4 +1,4 @@
-# admin-panel-frontend
+# dashboard-frontend
 
 ## Project setup
 ```
