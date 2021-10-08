@@ -1,5 +1,9 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col align="center">
+        <h1>About</h1>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>

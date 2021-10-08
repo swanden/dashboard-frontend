@@ -18,7 +18,7 @@
           />
         </a>
 
-        <h1 class="text-uppercase">Dashboard</h1>
+<!--        <h1 class="text-uppercase">Dashboard</h1>-->
       </div>
 
       <v-spacer></v-spacer>
@@ -29,7 +29,7 @@
         <v-row class="text-center justify-center">
           <v-col>
 
-            <v-tabs class="d-flex justify-center">
+            <v-tabs class="d-flex justify-center" v-if="isShowLoginMenu">
               <v-tab
                 v-for="tab in authMenuTabs"
                 :to="tab.url"
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import Notification from './Notification';
+import Notification from '@/components/Notification';
 
 export default {
   name: "Auth",
@@ -69,6 +69,11 @@ export default {
           url: '/signup'
         }
       ]
+    }
+  },
+  computed: {
+    isShowLoginMenu() {
+      return !this.isLoggedIn && this.authMenuTabs.find((el) => el.url === this.$route.path);
     }
   }
 }

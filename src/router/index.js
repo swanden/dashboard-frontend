@@ -52,10 +52,23 @@ const routes = [
   {
     path: '/reset/:token',
     name: 'reset',
-    component: () => import('../pages/auth/PasswordReset.vue'),
+    component: () => import('@/pages/auth/PasswordReset.vue'),
     meta: {
       hideForAuth: true
     }
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('@/pages/users/Profile.vue'),
+  },
+  {
+    path: '/about',
+    name: 'About',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
     path: '/404',
@@ -69,14 +82,6 @@ const routes = [
     path: '*',
     redirect: '/404'
   },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
 ]
 
 const router = new VueRouter({

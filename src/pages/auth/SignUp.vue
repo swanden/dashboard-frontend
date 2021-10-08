@@ -19,6 +19,22 @@
                   cols="12"
                 >
                   <v-text-field
+                    v-model="firstname"
+                    :rules="[rules.required]"
+                    label="Firstname"
+                    outlined
+                    required
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="lastname"
+                    :rules="[rules.required]"
+                    label="Lastname"
+                    outlined
+                    required
+                  ></v-text-field>
+
+                  <v-text-field
                     v-model="email"
                     :rules="[rules.required, rules.email]"
                     label="Email"
@@ -91,6 +107,8 @@ export default {
     confirmPasswordShow: false,
     confirmPassword: '',
     email: '',
+    firstname: '',
+    lastname: '',
     rules: {
       required: value => !!value || 'Required.',
       min: v => v.length >= 6 || 'Min 6 characters',
@@ -115,6 +133,8 @@ export default {
     async signUp() {
       try {
         await axios.post('/auth/signup', {
+          firstname: this.firstname,
+          lastname: this.lastname,
           email: this.email,
           password: this.password,
         });
