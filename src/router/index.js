@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store/index'
 
-import Home from '@/views/Home.vue'
+import Home from '@/pages/Home.vue'
 import Login from '@/pages/auth/Login.vue'
 import SignUp from "@/pages/auth/SignUp";
 import SignUpConfirm from "@/pages/auth/SignUpConfirm";
@@ -63,12 +63,9 @@ const routes = [
     component: () => import('@/pages/users/Profile.vue'),
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/users',
+    name: 'users',
+    component: () => import('@/pages/users/Users.vue'),
   },
   {
     path: '/404',

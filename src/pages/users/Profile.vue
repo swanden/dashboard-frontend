@@ -46,19 +46,17 @@
               <tr>
                 <th>Role</th>
                 <td>
-                  <v-badge
-                    :content="role"
-                    :color="roleColors[role]"
-                  ></v-badge>
+                  <RoleBadge
+                    :role="role"
+                  ></RoleBadge>
                 </td>
               </tr>
               <tr>
                 <th>Status</th>
                 <td>
-                  <v-badge
-                    :content="status"
-                    :color="statusColors[status]"
-                  ></v-badge>
+                  <StatusBadge
+                    :status="status"
+                  ></StatusBadge>
                 </td>
               </tr>
               </tbody>
@@ -88,7 +86,6 @@
                         label="Firstname*"
                         v-model="form.first"
                         :rules="[rules.required]"
-                        outlined
                         required
                       ></v-text-field>
                     </v-col>
@@ -99,7 +96,6 @@
                         label="Lastname*"
                         v-model="form.last"
                         :rules="[rules.required]"
-                        outlined
                         required
                       ></v-text-field>
                     </v-col>
@@ -138,10 +134,16 @@
 
 <script>
 import axios from '@/axios';
-import notification from '@/mixins/notification'
+import notification from '@/mixins/notification';
+import StatusBadge from "@/components/users/StatusBadge";
+import RoleBadge from "@/components/users/RoleBadge";
 
 export default {
   name: "Profile",
+  components: {
+    StatusBadge,
+    RoleBadge
+  },
   mixins: [notification],
   data: () => ({
     dialog: false,
@@ -158,20 +160,15 @@ export default {
     email: '',
     created: '',
     role: '',
-    roleColors: {
-      'Admin': 'green',
-      'User': 'grey'
-    },
     status: '',
-    statusColors: {
-      'Active': 'primary',
-      'Wait': 'grey',
-      'Blocked': 'red',
-    }
   }),
   async mounted() {
     try {
       const data = await axios.get('/profile');
+
+      if (!data) {
+        return;
+      }
 
       this.email = data.email;
       this.first = data.first;

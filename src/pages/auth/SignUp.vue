@@ -1,12 +1,5 @@
 <template>
   <v-container>
-<!--    <v-row class="justify-center">-->
-<!--      <v-col class="col-md-4">-->
-<!--        <v-alert type="success">-->
-<!--          User was successfully signed up. Please, visit your email box to confirm your email address.-->
-<!--        </v-alert>-->
-<!--      </v-col>-->
-<!--    </v-row>-->
     <v-row class="text-center justify-center">
         <v-card class="col-md-3">
 
@@ -139,7 +132,9 @@ export default {
           password: this.password,
         });
 
-        this.$refs.form.reset(); // May cause errors
+        this.$nextTick(() => {
+          this.$refs.form.reset(); // May cause errors
+        });
 
         this.showNotification({
           type: 'success',

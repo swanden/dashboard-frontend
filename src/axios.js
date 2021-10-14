@@ -28,13 +28,18 @@ axios.interceptors.response.use(response => {
 
   try {
     await store.dispatch('auth/refresh');
-    request.headers['Authorization'] = 'Bearer ' + store.state.user.access_token;
+    request.headers['Authorization'] = 'Bearer ' + store.state?.user?.access_token;
 
-    // await router.push(router.history.current.query.redirect || '/');
+    // console.log('router.history.current.fullPath', router.history.current.fullPath);
+    const url = router.history.current.fullPath || '/';
 
-    return axios(request);
+    // await router.push({path: url})
+
+    router.go(url);
+
+    // return axios(request);
   } catch (error) {
-    if (router.history.current.path !== '/login') {
+    if (router.history.current.path !== '/login' && !store.getters['auth/isLoggedIn']) {
       router.push({ name: 'login' });
       return Promise.reject(error);
     }

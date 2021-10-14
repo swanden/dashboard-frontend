@@ -41,15 +41,15 @@
         <v-list-item
           v-for="item in control"
           :key="item.title"
-
           :to="item.url"
+          v-show="!item.adminOnly || (item.adminOnly && isAdmin)"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title>{{ item.title }} {{ item.show }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -111,9 +111,9 @@
         </v-col>
       </v-row>
 
-      <keep-alive>
+<!--      <keep-alive>-->
         <router-view/>
-      </keep-alive>
+<!--      </keep-alive>-->
 
       <notification></notification>
 
@@ -137,14 +137,17 @@ export default {
       drawer: null,
       control: [
         {title: 'Profile', icon: 'mdi-account', url: '/profile'},
-        {title: 'Users', icon: 'mdi-account-multiple', url: '/users'},
+        {title: 'Users', icon: 'mdi-account-multiple', url: '/users', adminOnly: true},
       ]
     }
   },
   computed: {
     ...mapGetters(
       'auth',
-      {email: 'getEmail'}
+      {
+        email: 'getEmail',
+        isAdmin: 'isAdmin',
+      }
     ),
     breadcrumbs() {
       let breadcrumbs = [];

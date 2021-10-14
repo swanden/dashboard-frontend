@@ -48,7 +48,7 @@ export default {
       try {
         const user = await axios.post('/token', params, config);
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
-        user.roles = await axios.get('/user/role');
+        user.roles = await axios.get('/profile/role');
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('email', JSON.stringify(data.username));
         context.commit('login', user);
@@ -86,7 +86,7 @@ export default {
         try {
           const user = await axios.post('/token', params, config);
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
-          user.roles = await axios.get('/user/role');
+          user.roles = await axios.get('/profile/role');
           localStorage.setItem('user', JSON.stringify(user));
           context.commit('login', user);
 
