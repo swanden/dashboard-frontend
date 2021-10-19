@@ -1,0 +1,155 @@
+sudo vue create dashboard-frontend
+sudo chown -R den:den dashboard-frontend
+vue add vuetify
+npm install axios
+npm install vue-moment
+
+При возникновении ошибки
+Avoided redundant navigation to current location
+https://stackoverflow.com/a/64485378
+
+v-model via store
+https://stackoverflow.com/a/64236747
+
+Login check in router
+https://www.digitalocean.com/community/tutorials/how-to-set-up-vue-js-authentication-and-route-handling-using-vue-router
+
+Vuetify tabs with Vue Router
+https://stackoverflow.com/a/49721711
+
+Disable component re-render (для router-view тоже работает)
+https://vuejs.org/v2/api/#keep-alive
+https://forum.vuejs.org/t/conditional-keep-alive-with-vue-router-not-working/4319
+
+Horizontal and vertical alignment
+https://stackoverflow.com/a/52343912
+У родителя
+Vertical: class="d-flex align-center"
+Horizontal: class="d-flex justify-center"
+align-self
+justify-self
+
+Vertical: align : 'start','center','end','baseline','stretch'
+Horizontal: justify : 'start','center','end','space-around','space-between'
+
+Redirect from login/signup to home, redirect from other pages to login
+https://newbedev.com/vuejs-redirect-from-login-register-to-home-if-already-loggedin-redirect-from-other-pages-to-login-if-not-loggedin-in-vue-router
+
+v-data-table item slot
+https://stackoverflow.com/a/59278959
+
+Data table slots
+          <template v-slot:item.name="props">
+            <v-edit-dialog
+              large
+              persistent
+              @open="openDialog(props)"
+              @close="closeDialog(props)"
+              @cancel="closeDialog(props)"
+              @save="saveDialog(props)"
+            >
+              <div>{{ `${props.item.first} ${props.item.last}` }}</div>
+              <template v-slot:input>
+                <div class="mt-4 text-h6">
+                  Update Name
+                </div>
+                <v-row>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-text-field
+                      label="Firstname*"
+                      v-model="editedItem.first"
+
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-text-field
+                      label="Lastname*"
+                      v-model="editedItem.last"
+
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+              </template>
+            </v-edit-dialog>
+          </template>
+
+                    <template v-slot:item="{ item }">
+                      <tr>
+                        <td>
+                          {{ item.name }}
+                        </td>
+                        <td>
+                          {{ item.email }}
+                        </td>
+                        <td>
+                          {{ item.date }}
+                        </td>
+                        <td>
+                          <RoleBadge
+                            :role="item.role"
+                          >
+                          </RoleBadge>
+                        </td>
+                        <td>
+                          <StatusBadge
+                            :status="item.status"
+                          >
+                          </StatusBadge>
+                        </td>
+                        <td>
+                          <v-icon
+                            small
+                            class="mr-2"
+                            @click="editItem(item)"
+                          >
+                            mdi-pencil
+                          </v-icon>
+                          <v-icon
+                            small
+                            @click="deleteItem(item)"
+                          >
+                            mdi-delete
+                          </v-icon>
+                        </td>
+                      </tr>
+                    </template>
+
+
+Чтобы отлаживать refresh токена, задавать ему срок истечения несколько секнуд
+https://github.com/trikoder/oauth2-bundle пункт 2
+
+
+TypeScript
+
+npm i --save-dev @types/vue-moment
+Если возникает ошибка Could not find a declaration file for module 'vue-moment'
+https://stackoverflow.com/a/42505940
+npm install -D @types/module-name
+
+
+Если тип свойства не объявлен в классе
+(router as any).history.current.fullPath
+https://github.com/vuejs/vue-router/issues/2157
+
+Деструктурирующее присваивание
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+
+Vues TypeScript
+https://codeburst.io/vuex-and-typescript-3427ba78cfa8
+https://betterprogramming.pub/the-state-of-typed-vuex-the-cleanest-approach-2358ee05d230
+https://medium.com/thousandeyes-engineering/how-to-achieve-good-type-safety-with-vue-js-option-api-and-vuex-90e018c78f31
+https://dev.to/3vilarthas/vuex-typescript-m4j
+
+Для mixin'ов юзать vue-typed-mixins. Сам mixin как и компоненты определять через Vue.extend()
+https://github.com/ktsn/vue-typed-mixins
+
+Если this.$store is not defined может помочь это
+https://next.vuex.vuejs.org/guide/typescript-support.html
+https://stackoverflow.com/a/64414117
