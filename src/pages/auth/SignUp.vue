@@ -86,13 +86,15 @@
 </template>
 
 <script>
+import mixins from 'vue-typed-mixins';
 import axios from '@/axios';
 import {mapActions} from 'vuex';
 import notification from "@/mixins/notification";
+import { SnackBarType } from '@/store/modules/notification/types';
 
-export default {
+export default mixins(notification).extend({
   name: "SignUp",
-  mixins: [notification],
+  // mixins: [notification],
   data: () => ({
     valid: false,
     passwordShow: false,
@@ -137,7 +139,7 @@ export default {
         });
 
         this.showNotification({
-          type: 'success',
+          type: SnackBarType.SUCCESS,
           msg: 'User was successfully signed up. Please, visit your email box to confirm your email address.',
           timeout: -1
         });
@@ -146,7 +148,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

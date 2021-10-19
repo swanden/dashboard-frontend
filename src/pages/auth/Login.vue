@@ -58,11 +58,12 @@
 </template>
 
 <script>
+import mixins from 'vue-typed-mixins';
 import notification from "@/mixins/notification";
 
-export default {
+export default mixins(notification).extend({
   name: "Login",
-  mixins: [notification],
+  // mixins: [notification],
   data: () => ({
     valid: false,
     passwordShow: false,
@@ -92,7 +93,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

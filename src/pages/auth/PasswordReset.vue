@@ -43,13 +43,14 @@
 </template>
 
 <script>
+import mixins from 'vue-typed-mixins';
 import notification from "@/mixins/notification";
 import {mapActions} from 'vuex';
 import axios from "@/axios";
+import { SnackBarType } from '@/store/modules/notification/types';
 
-export default {
+export default mixins(notification).extend({
   name: "ResetPassword",
-  mixins: [notification],
   props: ['token'],
   data: () => ({
     valid: false,
@@ -86,7 +87,7 @@ export default {
         this.$refs.form.reset(); // May cause errors
 
         this.showNotification({
-          type: 'success',
+          type: SnackBarType.SUCCESS,
           msg: 'Password was successfully changed.',
           timeout: -1
         });
@@ -95,7 +96,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

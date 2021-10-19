@@ -39,13 +39,15 @@
 </template>
 
 <script>
+import mixins from 'vue-typed-mixins';
 import notification from "@/mixins/notification";
 import {mapActions} from 'vuex';
 import axios from "@/axios";
+import { SnackBarType } from '@/store/modules/notification/types';
 
-export default {
+export default mixins(notification).extend({
   name: "ResetPasswordRequest",
-  mixins: [notification],
+  // mixins: [notification],
   data: () => ({
     valid: false,
     email: '',
@@ -73,7 +75,7 @@ export default {
         this.$refs.form.reset(); // May cause errors
 
         this.showNotification({
-          type: 'success',
+          type: SnackBarType.SUCCESS,
           msg: 'Check your email.',
           timeout: -1
         });
@@ -82,7 +84,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

@@ -2,9 +2,9 @@
   <v-app>
 
     <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      temporary
+        v-model="drawer"
+        fixed
+        temporary
     >
       <v-list-item>
         <v-list-item-avatar>
@@ -21,9 +21,9 @@
       <v-list dense>
 
         <v-list-item
-          key="Home"
+            key="Home"
 
-          to="/"
+            to="/"
         >
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
@@ -39,10 +39,10 @@
         <v-subheader>Control</v-subheader>
 
         <v-list-item
-          v-for="item in control"
-          :key="item.title"
-          :to="item.url"
-          v-show="!item.adminOnly || (item.adminOnly && isAdmin)"
+            v-for="item in control"
+            :key="item.title"
+            :to="item.url"
+            v-show="!item.adminOnly || (item.adminOnly && isAdmin)"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -56,9 +56,9 @@
         <v-divider></v-divider>
 
         <v-list-item
-          key="logout"
-          link
-          @click="performLogout"
+            key="logout"
+            link
+            @click="performLogout"
         >
           <v-list-item-icon>
             <v-icon>mdi-logout</v-icon>
@@ -73,26 +73,26 @@
     </v-navigation-drawer>
 
     <v-app-bar
-      app
-      color="primary"
-      dark
+        app
+        color="primary"
+        dark
     >
       <v-app-bar-nav-icon
-        @click="drawer = !drawer"
+          @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
       <div class="d-flex align-center">
         <a href="/">
           <v-img
-            alt="Vuetify Logo"
-            class="shrink mr-2"
-            contain
-            src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-            transition="scale-transition"
-            width="40"
+              alt="Vuetify Logo"
+              class="shrink mr-2"
+              contain
+              src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+              transition="scale-transition"
+              width="40"
           />
         </a>
 
-<!--        <h1 class="text-uppercase">Dashboard</h1>-->
+        <!--        <h1 class="text-uppercase">Dashboard</h1>-->
       </div>
 
       <v-spacer></v-spacer>
@@ -104,16 +104,16 @@
         <v-col>
 
           <v-breadcrumbs
-            :items="breadcrumbs"
-            divider="/"
+              :items="breadcrumbs"
+              divider="/"
           ></v-breadcrumbs>
 
         </v-col>
       </v-row>
 
-<!--      <keep-alive>-->
-        <router-view/>
-<!--      </keep-alive>-->
+      <!--      <keep-alive>-->
+      <router-view/>
+      <!--      </keep-alive>-->
 
       <notification></notification>
 
@@ -121,17 +121,17 @@
   </v-app>
 </template>
 
-<script>
-import Notification from "@/components/Notification";
+<script lang="ts">
+import Notification from "@/components/Notification.vue";
 import {mapGetters, mapActions} from 'vuex';
 import notification from "@/mixins/notification";
+import mixins from 'vue-typed-mixins';
 
-export default {
+export default mixins(notification).extend({
   name: "Auth",
   components: {
     Notification
   },
-  mixins: [notification],
   data() {
     return {
       drawer: null,
@@ -143,11 +143,11 @@ export default {
   },
   computed: {
     ...mapGetters(
-      'auth',
-      {
-        email: 'getEmail',
-        isAdmin: 'isAdmin',
-      }
+        'auth',
+        {
+          email: 'getEmail',
+          isAdmin: 'isAdmin',
+        }
     ),
     breadcrumbs() {
       let breadcrumbs = [];
@@ -161,7 +161,7 @@ export default {
 
       this.$route.matched.forEach(el => {
         breadcrumbs.push({
-          text: el.name.toUpperCase(),
+          text: el.name?.toUpperCase(),
           disabled: this.$route.path === el.path || this.$route.path === el.path + '/',
           href: el.path
         });
@@ -172,8 +172,8 @@ export default {
   },
   methods: {
     ...mapActions(
-      'auth',
-      {logout: 'logout'}
+        'auth',
+        {logout: 'logout'}
     ),
     async performLogout() {
       try {
@@ -184,7 +184,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

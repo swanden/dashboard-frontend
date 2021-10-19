@@ -6,12 +6,14 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 export const roles = [
   'Admin',
   'User'
 ];
 
-export default {
+export default Vue.extend({
   name: "RoleBadge",
   props: {
     role: String,
@@ -22,7 +24,7 @@ export default {
       'User': 'grey'
     }
   })
-}
+});
 </script>
 
 <style scoped>

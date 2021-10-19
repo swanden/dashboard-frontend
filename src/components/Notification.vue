@@ -21,31 +21,32 @@
   </v-snackbar>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import {mapGetters} from "vuex";
 
-export default {
+export default Vue.extend({
   name: "Notification",
   computed: {
+    ...mapGetters(
+        'notification',
+        {
+          snackbarText: 'snackbarText',
+          snackbarType: 'snackbarType',
+          snackbarTimeout: 'snackbarTimeout',
+          snackbarProps: 'snackbarProps'
+        }
+    ),
     isShowSnackbar: {
-      get() {
+      get(): boolean {
         return this.$store.getters["notification/isShowSnackbar"];
       },
-      set(value) {
+      set(value: boolean): void {
         this.$store.dispatch('notification/setIsShowSnackBar', value)
       }
-    },
-    ...mapGetters(
-      'notification',
-      {
-        snackbarText: 'snackbarText',
-        snackbarType: 'snackbarType',
-        snackbarTimeout: 'snackbarTimeout',
-        snackbarProps: 'snackbarProps'
-      }
-    )
+    }
   }
-}
+});
 </script>
 
 <style scoped>

@@ -192,14 +192,14 @@
 </template>
 
 <script>
+import mixins from 'vue-typed-mixins';
 import axios from '@/axios';
 import notification from "@/mixins/notification";
 import RoleBadge, {roles} from "@/components/users/RoleBadge";
 import StatusBadge, {statuses} from "@/components/users/StatusBadge";
 
-export default {
+export default mixins(notification).extend({
   name: "Users",
-  mixins: [notification],
   components: {
     RoleBadge,
     StatusBadge
@@ -376,7 +376,7 @@ export default {
       }
     },
   },
-}
+});
 </script>
 
 <style scoped>

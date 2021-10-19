@@ -4,11 +4,11 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import moment from 'vue-moment';
+import moment from 'vue-moment'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
-Vue.use(moment);
+Vue.use(moment)
 
 new Vue({
   router,

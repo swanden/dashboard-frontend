@@ -5,12 +5,13 @@
   </div>
 </template>
 
-<script>
-import Auth from '@/layouts/Auth';
-import Main from '@/layouts/Main';
+<script lang="ts">
+import Vue from 'vue';
+import Auth from '@/layouts/Auth.vue';
+import Main from '@/layouts/Main.vue';
 import { mapGetters } from "vuex";
 
-export default {
+export default Vue.extend({
   name: 'App',
   components: {
     Auth,
@@ -21,9 +22,9 @@ export default {
   }),
   computed: {
     ...mapGetters(
-      'auth',
-      { isLoggedIn: 'isLoggedIn' }
+        'auth',
+        { isLoggedIn: 'isLoggedIn' }
     )
   }
-};
+});
 </script>

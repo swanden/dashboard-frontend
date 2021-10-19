@@ -4,7 +4,7 @@ import router from './router/index'
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 
-const user = JSON.parse(localStorage.getItem('user'));
+const user = JSON.parse(<string>localStorage.getItem('user'));
 if (user) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
 }
@@ -20,7 +20,7 @@ axios.interceptors.response.use(response => {
   }
   const request = error.config;
   if (request.data) {
-    let data = JSON.parse(request.data);
+    const data = JSON.parse(request.data);
     if (data && data.grant_type) {
       return Promise.reject(error);
     }
@@ -28,10 +28,11 @@ axios.interceptors.response.use(response => {
 
   try {
     await store.dispatch('auth/refresh');
-    request.headers['Authorization'] = 'Bearer ' + store.state?.user?.access_token;
+    // eslint-disable-next-line
+    request.headers['Authorization'] = `Bearer ${(store as any)?.user?.access_token}`;
 
-    // console.log('router.history.current.fullPath', router.history.current.fullPath);
-    const url = router.history.current.fullPath || '/';
+    // eslint-disable-next-line
+    const url = (router as any).history.current.fullPath || '/';
 
     // await router.push({path: url})
 
@@ -39,7 +40,8 @@ axios.interceptors.response.use(response => {
 
     // return axios(request);
   } catch (error) {
-    if (router.history.current.path !== '/login' && !store.getters['auth/isLoggedIn']) {
+    // eslint-disable-next-line
+    if ((router as any).history.current.path !== '/login' && !store.getters['auth/isLoggedIn']) {
       router.push({ name: 'login' });
       return Promise.reject(error);
     }

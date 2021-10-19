@@ -133,18 +133,19 @@
 </template>
 
 <script>
+import mixins from 'vue-typed-mixins';
 import axios from '@/axios';
 import notification from '@/mixins/notification';
 import StatusBadge from "@/components/users/StatusBadge";
 import RoleBadge from "@/components/users/RoleBadge";
 
-export default {
+export default mixins(notification).extend({
   name: "Profile",
   components: {
     StatusBadge,
     RoleBadge
   },
-  mixins: [notification],
+  // mixins: [notification],
   data: () => ({
     dialog: false,
     valid: false,
@@ -204,7 +205,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

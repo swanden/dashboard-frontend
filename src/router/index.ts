@@ -1,20 +1,19 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import VueRouter, { RouteConfig } from 'vue-router'
 import store from '@/store/index'
 
 import Home from '@/pages/Home.vue'
 import Login from '@/pages/auth/Login.vue'
-import SignUp from "@/pages/auth/SignUp";
-import SignUpConfirm from "@/pages/auth/SignUpConfirm";
-import PasswordResetRequest from "@/pages/auth/PasswordResetRequest";
+import SignUp from '@/pages/auth/SignUp.vue';
+import SignUpConfirm from '@/pages/auth/SignUpConfirm.vue';
+import PasswordResetRequest from '@/pages/auth/PasswordResetRequest.vue';
 
 Vue.use(VueRouter)
 
-const routes = [
+const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'home',
-    // redirect: '/login'
     component: Home
   },
   {
@@ -68,14 +67,6 @@ const routes = [
     component: () => import('@/pages/users/Users.vue'),
   },
   {
-    path: '/404',
-    name: '404',
-    component: () => import('../pages/404Page.vue'),
-    meta: {
-      hideForAuth: true
-    }
-  },
-  {
     path: '*',
     redirect: '/404'
   },
@@ -103,7 +94,6 @@ router.beforeEach((to, from, next) => {
 
     next()
   }
-})
-
+});
 
 export default router

@@ -6,12 +6,14 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 export const statuses = [
   'Active',
   'Blocked'
 ];
 
-export default {
+export default Vue.extend({
   name: "StatusBadge",
   props: {
     status: String,
@@ -23,7 +25,7 @@ export default {
       'Blocked': 'red',
     }
   })
-}
+});
 </script>
 
 <style scoped>
