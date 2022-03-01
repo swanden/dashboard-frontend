@@ -1,4 +1,6 @@
-# dashboard-frontend
+# Frontend Dashboard Template
+
+Template for Vue + Vuetify dashboard projects.
 
 ## Project setup
 ```
